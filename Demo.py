@@ -153,18 +153,23 @@ def train_model(datas):
     #model.save(model_path)
     return model
 
-def predict(model_path,left,right):
+
+def load_model(model_path):    
+    model = siamese_network()
+    model.load_weights(model_path) 
+    return model
+
+def predict(model,left,right):
     vocabulary = load_vocabulary()
     sample_x_left = [char for char in left if char]
     sample_x_right = [char for char in right if char]
     left_x_train = [[vocabulary[char] for char in sample_x_left if char in vocabulary]]
     right_x_train = [[vocabulary[char] for char in sample_x_right if char in vocabulary]]  
     left_x_train = pad_sequences(left_x_train, SEQ_LEN)
-    right_x_train = pad_sequences(right_x_train, SEQ_LEN)          
-    model = siamese_network()
-    model.load_weights(model_path)
+    right_x_train = pad_sequences(right_x_train, SEQ_LEN)        
     result = model.predict([left_x_train, right_x_train])        
     print(result)
+
 
 #save_vocabulary()
 train_datas = load_traindata(train_path)
